@@ -19,16 +19,6 @@ class SigninScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   padding: const EdgeInsets.all(10),
-          //   child: TextField(
-          //     // controller: emailController,
-          //     decoration: const InputDecoration(
-          //       border: OutlineInputBorder(),
-          //       labelText: 'Email'
-          //     ),
-          //   ),
-          // ),
 
         ],
       ),

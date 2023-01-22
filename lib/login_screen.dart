@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,8 +10,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  
+  @override
+  void dispose(){
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -56,6 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(10),
             child: TextField(
               controller: emailController,
+              cursorColor: Colors.white,
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email'
@@ -77,11 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 60,
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: ElevatedButton(
-              child: const Text('Log In'),
-              onPressed: (){
-                print(emailController.text);
-                print(passwordController.text);
-              },
+              onPressed: logIn,
+              child:const Text('Log In'),
             ),
           ),
           Row(
@@ -109,4 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+Future logIn() async {
+  await FirebaseAuth.instance.signInWithEmailAndPassword(
+    email: emailController.text.trim(),
+    password: passwordController.text.trim());
 }
+
+}
+
