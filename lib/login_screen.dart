@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_donation/main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,22 +10,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
   @override
-  void dispose(){
+  void dispose() {
     emailController.dispose();
     passwordController.dispose();
 
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
-
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ListView(
@@ -52,15 +50,12 @@ class _LoginScreenState extends State<LoginScreen> {
           //   ),
           // ),
           Container(
-            height: 250.0,
-            width: 250.0,
-            decoration:const BoxDecoration(
-              image:DecorationImage(
-                image: AssetImage('assets/food_donation_logo.png'),
-                fit: BoxFit.cover
-              )
-            )
-          ),
+              height: 250.0,
+              width: 250.0,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/food_donation_logo.png'),
+                      fit: BoxFit.cover))),
 
           Container(
             padding: const EdgeInsets.all(10),
@@ -69,13 +64,11 @@ class _LoginScreenState extends State<LoginScreen> {
               cursorColor: Colors.white,
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Email'
-              ),
+                  border: OutlineInputBorder(), labelText: 'Email'),
             ),
           ),
           Container(
-          padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: TextField(
               obscureText: true,
               controller: passwordController,
@@ -90,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: ElevatedButton(
               onPressed: logIn,
-              child:const Text('Log In'),
+              child: const Text('Log In'),
             ),
           ),
           Row(
@@ -99,31 +92,40 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text('Don\'t have an account?'),
               TextButton(
                 child: const Text(
-                  'Sign In',
+                  'Sign Up',
                   style: TextStyle(fontSize: 20),
                 ),
-                onPressed: (){
+                onPressed: () {
                   //signup screen
                 },
               )
             ],
           ),
           TextButton(
-            onPressed: (){
+            onPressed: () {
               //forgot password screen
             },
-            child: const Text('Forgot Password',),
+            child: const Text(
+              'Forgot Password',
+            ),
           ),
         ],
       ),
     );
   }
 
-Future logIn() async {
-  await FirebaseAuth.instance.signInWithEmailAndPassword(
-    email: emailController.text.trim(),
-    password: passwordController.text.trim());
+  Future logIn() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
 }
-
-}
-
