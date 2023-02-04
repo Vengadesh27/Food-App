@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'package:food_donation/auth/auth_page.dart';
 import 'home_screen.dart';
 
 // void main() => runApp(const MyApp());
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             } else if (snapshot.hasData) {
               return const HomeScreen();
             } else {
-              return const LoginScreen();
+              return const AuthPage();
             }
           },
         ),

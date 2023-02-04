@@ -1,9 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_donation/auth/signin_screen.dart';
 import 'package:food_donation/main.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final VoidCallback onClickedSignUp;
+  const LoginScreen({super.key, required this.onClickedSignUp});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -86,29 +89,25 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('Log In'),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('Don\'t have an account?'),
-              TextButton(
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () {
-                  //signup screen
-                },
-              )
-            ],
-          ),
-          TextButton(
-            onPressed: () {
-              //forgot password screen
-            },
-            child: const Text(
-              'Forgot Password',
+
+          Container(
+            padding: const EdgeInsets.all(15),
+            child: RichText(
+              text: TextSpan(
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  text: 'Don\'t have an account? ',
+                  children: [
+                    TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = widget.onClickedSignUp,
+                        text: 'Sign Up',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+              textAlign: TextAlign.center,
             ),
-          ),
+          )
         ],
       ),
     );
@@ -129,3 +128,33 @@ class _LoginScreenState extends State<LoginScreen> {
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
+
+
+/*
+Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('Don\'t have an account?'),
+              TextButton(
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () {
+                  setState(() {
+                    widget.onClickedSignUp;
+                  });
+                  //signup screen
+                  
+                },
+              )
+            ],
+          ),
+          TextButton(
+            onPressed: () {
+              //forgot password screen
+            },
+            child: const Text(
+              'Forgot Password',
+            ),
+          ), */
