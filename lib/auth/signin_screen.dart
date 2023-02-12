@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
+import 'package:food_donation/main.dart';
 
 class SigninScreen extends StatefulWidget {
   final Function() onClickedLogIn;
@@ -32,7 +33,10 @@ class _SigninScreenState extends State<SigninScreen> {
             child: const Text(
               "SignUp Screen",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700,color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey),
             ),
           ),
           Container(
@@ -43,6 +47,7 @@ class _SigninScreenState extends State<SigninScreen> {
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(), labelText: 'Email'),
+              
             ),
           ),
           Container(
@@ -60,33 +65,47 @@ class _SigninScreenState extends State<SigninScreen> {
             height: 60,
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: ElevatedButton(
-              onPressed: (){},
-              child: const Text('Log In'),
+              onPressed: signUp,
+              child: const Text('Sign Up'),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(15),
-            child: RichText(
-              text: TextSpan(
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                  text: 'Already have an account? ',
-                  children: [
-                    TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = widget.onClickedLogIn,
-                        text: 'Log In',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontWeight: FontWeight.bold)),
-                  ]),
-              textAlign: TextAlign.center,
-            ),
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('Already have an account?'),
+              TextButton(
+                onPressed: widget.onClickedLogIn,
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(fontSize: 20),
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );
   }
+
+  Future signUp() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+
+    //Navigator.of(Context) not working!
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
 }
+
 
 
 /*
@@ -114,4 +133,27 @@ return SingleChildScrollView(
 
       ),
     );
+ */
+
+
+/*
+Container(
+            padding: const EdgeInsets.all(15),
+            child: RichText(
+              text: TextSpan(
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  text: 'Already have an account? ',
+                  children: [
+                    TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = widget.onClickedLogIn,
+                        text: 'Log In',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+              textAlign: TextAlign.center,
+            ),
+          )
+          
  */
