@@ -28,28 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: const EdgeInsets.all(10),
       child: ListView(
         children: <Widget>[
-          // Container(
-          //   alignment: Alignment.center,
-          //   padding: const EdgeInsets.all(10),
-          //   child: const Text(
-          //     'Food Donation App',
-          //     style: TextStyle(
-          //       color: Colors.blue,
-          //       fontWeight: FontWeight.w500,
-          //       fontSize: 30
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   alignment: Alignment.center,
-          //   padding: const EdgeInsets.all(10),
-          //   child: const Text(
-          //     'Sign In',
-          //     style: TextStyle(
-          //       fontSize: 20
-          //     ),
-          //   ),
-          // ),
           Container(
               height: 250.0,
               width: 250.0,
@@ -57,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   image: DecorationImage(
                       image: AssetImage('assets/food_donation_logo.png'),
                       fit: BoxFit.cover))),
-
           Container(
             padding: const EdgeInsets.all(10),
             child: TextField(
@@ -108,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
               'Forgot Password',
             ),
           ),
-          
         ],
       ),
     );
