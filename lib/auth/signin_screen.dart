@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_donation/main.dart';
 import 'package:email_validator/email_validator.dart';
+import 'utils.dart';
 
 class SigninScreen extends StatefulWidget {
   final Function() onClickedLogIn;
@@ -23,6 +25,15 @@ class _SigninScreenState extends State<SigninScreen> {
   static List<String> items = <String>['donor', 'recipient'];
   String dropDownValue = items.first;
   static final RegExp nameRegExp = RegExp('[a-zA-Z]');
+
+  Future<void> saveSignUpData(
+      String fname, String email,String role, String uid) async {
+        await FirebaseFirestore.instance.collection("users").doc(uid).set({
+          'Email': email,
+          'Fname': fname,
+          'role': role,
+        });
+      }
 
   @override
   void dispose() {
@@ -116,7 +127,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       dropDownValue = value!;
                     });
                   },
-                  validator: (value) => value == null? 'field required' : null ,
+                  validator: (value) => value == null ? 'field required' : null,
                   items: items.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -152,21 +163,22 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   Future signUp() async {
-
     final isValid = formKey.currentState!.validate();
-    if(!isValid) return;
-    
+    if (!isValid) return;
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+          saveSignUpData(fnameController.text,emailController.text.trim(),dropDownValue,userCred.user!.uid);
     } on FirebaseAuthException catch (e) {
       print(e);
+      Utils.showSnackBar(e.message);
     }
 
     //Navigator.of(Context) not working!

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'pages/donations.dart';
 import 'pages/profile.dart';
@@ -28,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+    // final user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       body: Center(
         child: pages.elementAt(_selectedIndex),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_donation/auth/utils.dart';
 import 'package:food_donation/main.dart';
+import 'package:email_validator/email_validator.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onClickedSignUp;
@@ -37,23 +39,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       fit: BoxFit.cover))),
           Container(
             padding: const EdgeInsets.all(10),
-            child: TextField(
+            child: TextFormField(
               controller: emailController,
               cursorColor: Colors.white,
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(), labelText: 'Email'),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (email) =>
+                      email != null && !EmailValidator.validate(email)
+                          ? 'Enter a valid email'
+                          : null,
             ),
           ),
           Container(
             padding: const EdgeInsets.all(10),
-            child: TextField(
+            child: TextFormField(
               obscureText: true,
               controller: passwordController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Password',
+                
               ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: ((value) => value != null && value.length < 6
+                      ? 'Enter minimum 6 characters'
+                      : null),
             ),
           ),
           Container(
@@ -101,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
           password: passwordController.text.trim());
     } on FirebaseAuthException catch (e) {
       print(e);
+      Utils.showSnackBar(e.message);
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
