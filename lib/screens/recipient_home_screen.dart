@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../pages/donations.dart';
 import '../pages/profile.dart';
 
-
 class RecipientHomeScreen extends StatefulWidget {
   const RecipientHomeScreen({super.key});
 
@@ -13,16 +12,23 @@ class RecipientHomeScreen extends StatefulWidget {
 class _RecipientHomeScreenState extends State<RecipientHomeScreen> {
   int _selectedIndex = 0;
 
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static const List<Widget> pages = <Widget>[
+    Text(
+      'Welcome recipient',
+      style: optionStyle,
+    ),
     DonationPage(),
     ProfilePage(),
-    Text('You are recipient'),
   ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,15 +38,15 @@ class _RecipientHomeScreenState extends State<RecipientHomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Homepage',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),
             label: 'Donations',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
             label: 'Profile',
           ),
         ],

@@ -11,10 +11,13 @@ class DonorHomeScreen extends StatefulWidget {
 
 class _DonorHomeScreenState extends State<DonorHomeScreen> {
   int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static const List<Widget> pages = <Widget>[
+    Text('Welcome Donor', style: optionStyle,),
     DonationPage(),
     ProfilePage(),
-    Text('You are donor'),
   ];
 
   void _onItemTapped(int index) {
@@ -22,7 +25,6 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
       _selectedIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +35,16 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Homepage',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),
             label: 'Donations',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.donut_large_rounded),
-            label: 'Admin',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -12,16 +12,20 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   int _selectedIndex = 0;
 
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static const List<Widget> pages = <Widget>[
+    Text('Welcome Admin', style: optionStyle,),
     DonationPage(),
     ProfilePage(),
-    Text('You are admin'),
   ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,16 +35,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Homepage',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),
             label: 'Donations',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.admin_panel_settings),
-            label: 'Admin',
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
