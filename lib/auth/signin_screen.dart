@@ -67,7 +67,6 @@ class _SigninScreenState extends State<SigninScreen> {
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
                     controller: fnameController,
-                    cursorColor: Colors.white,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -84,7 +83,6 @@ class _SigninScreenState extends State<SigninScreen> {
                 padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   controller: emailController,
-                  cursorColor: Colors.white,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: 'Email'),

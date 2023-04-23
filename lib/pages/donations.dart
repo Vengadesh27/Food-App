@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_donation/pages/donation_form.dart';
 
 class DonationPage extends StatefulWidget {
   const DonationPage({super.key});
@@ -20,9 +21,8 @@ class _DonationPageState extends State<DonationPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () {
-          setState(() {
-          });
-          
+          showDialog(
+              context: context, builder: ((context) => const DonationForm()));
         },
         child: const Icon(Icons.add),
       ),
