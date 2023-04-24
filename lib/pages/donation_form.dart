@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'donation_crud.dart';
+import '../auth/utils.dart';
 
 class DonationForm extends StatefulWidget {
   const DonationForm({super.key});
@@ -14,6 +17,25 @@ class _DonationFormState extends State<DonationForm> {
   final TextEditingController donationDetails = TextEditingController();
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
+
+  Future<void> createUser(
+      {required String donationTitle,
+      required String donationDetails,
+      required int donationQuantity,
+      required String donationLocation}) async {
+    final docDonation =
+        FirebaseFirestore.instance.collection('donations').doc();
+
+    final donationCrud = DonationCRUD(
+        donationId: docDonation.id,
+        donationTitle: donationTitle,
+        donationDetails: donationDetails,
+        donationQuantity: donationQuantity,
+        donationLocation: donationLocation);
+    final json = donationCrud.toJson();
+
+    await docDonation.set(json);
+  }
 
   @override
   void dispose() {
@@ -67,6 +89,7 @@ class _DonationFormState extends State<DonationForm> {
               TextFormField(
                 controller: donationQuantity,
                 textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Donation Quantity'),
@@ -98,7 +121,21 @@ class _DonationFormState extends State<DonationForm> {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) return;
+            try {
+              createUser(
+                  donationTitle: donationTitle.text,
+                  donationDetails: donationDetails.text,
+                  donationQuantity: int.parse(donationQuantity.text),
+                  donationLocation: donationLocation.text);
+              Utils.showSnackBarGreen('Successfully added Donation');
+              Navigator.pop(context);
+            } on FirebaseException catch (e) {
+              Utils.showSnackBar(e.message);
+            }
+          },
           child: const Text('Save'),
         ),
       ],

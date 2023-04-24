@@ -44,7 +44,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.admin_panel_settings),
-            label: 'Profile',
+            label: 'Admin Profile',
           ),
         ],
         currentIndex: _selectedIndex,
