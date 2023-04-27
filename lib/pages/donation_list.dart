@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'donation_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../auth/utils.dart';
 
 //READ DONATION AND CREATE DONATION LIST FUNCTIONS HERE
 
@@ -106,7 +107,10 @@ Widget buildDonationList(DonationModel donation) => Container(
                   const SizedBox(width: 8),
                   TextButton(
                     child: const Text('DELETE'),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await FirebaseFirestore.instance.collection('donations').doc(donation.donationId).delete();
+                      Utils.showSnackBar('Donation was deleted');
+                    },
                   ),
                   const SizedBox(width: 8),
                 ],
