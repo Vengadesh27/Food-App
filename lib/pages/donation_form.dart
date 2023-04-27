@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'donation_crud.dart';
+import 'donation_model.dart';
 import '../auth/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+//DONATION FORM WHEN YOU PRESS ADD DONATION BUTTON
 
 class DonationForm extends StatefulWidget {
   const DonationForm({super.key});
@@ -18,20 +21,24 @@ class _DonationFormState extends State<DonationForm> {
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
 
-  Future<void> createUser(
+  Future<void> createDonation(
       {required String donationTitle,
       required String donationDetails,
       required int donationQuantity,
       required String donationLocation}) async {
     final docDonation =
         FirebaseFirestore.instance.collection('donations').doc();
+    final donorInfo = FirebaseAuth.instance.currentUser!;
 
-    final donationCrud = DonationCRUD(
-        donationId: docDonation.id,
-        donationTitle: donationTitle,
-        donationDetails: donationDetails,
-        donationQuantity: donationQuantity,
-        donationLocation: donationLocation);
+    final donationCrud = DonationModel(
+      donationId: docDonation.id,
+      donationTitle: donationTitle,
+      donationDetails: donationDetails,
+      donationQuantity: donationQuantity,
+      donationLocation: donationLocation,
+      donorEmail: donorInfo.email!,
+      donorID: donorInfo.uid
+    );
     final json = donationCrud.toJson();
 
     await docDonation.set(json);
@@ -125,7 +132,7 @@ class _DonationFormState extends State<DonationForm> {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) return;
             try {
-              createUser(
+              createDonation(
                   donationTitle: donationTitle.text,
                   donationDetails: donationDetails.text,
                   donationQuantity: int.parse(donationQuantity.text),

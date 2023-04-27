@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/donations.dart';
+import 'pages/donation_screen.dart';
 import 'pages/profile.dart';
 
 class HomeScreen extends StatefulWidget {

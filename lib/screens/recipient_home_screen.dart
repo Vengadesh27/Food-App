@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../pages/donations.dart';
+import '../pages/donation_screen.dart';
 import '../pages/profile.dart';
 
 class RecipientHomeScreen extends StatefulWidget {
@@ -11,6 +11,7 @@ class RecipientHomeScreen extends StatefulWidget {
 
 class _RecipientHomeScreenState extends State<RecipientHomeScreen> {
   int _selectedIndex = 0;
+  String role = 'recipient';
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);

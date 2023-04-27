@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class DonationCRUD {
-  final donorInfo = FirebaseAuth.instance.currentUser!;
+//DONATION CLASS MODEL
+
+class DonationModel {
   final String donationId;
   final String donationTitle;
   final String donationDetails;
@@ -11,13 +11,17 @@ class DonationCRUD {
   final String recipientId = 'Not defined';
   final String recipientName = 'Not defined';
   final String donationStatus = 'Available';
+  final String donorEmail;
+  final String donorID;
 
-  DonationCRUD({
+  DonationModel({
     required this.donationId,
     required this.donationTitle,
     required this.donationDetails,
     required this.donationQuantity,
     required this.donationLocation,
+    required this.donorEmail,
+    required this.donorID,
     donationStatus,
   });
 
@@ -27,20 +31,22 @@ class DonationCRUD {
         'description': donationDetails,
         'quantity': donationQuantity,
         'location': donationLocation,
-        'donor': donorInfo.email!,
-        'donorID': donorInfo.uid,
+        'donor': donorEmail,
+        'donorID': donorID,
         'recipient': recipientName,
         'recipientId': recipientId,
         'timeStamp': FieldValue.serverTimestamp(),
         'status': donationStatus
       };
 
-  static DonationCRUD fromJson(Map<String, dynamic> json) => DonationCRUD(
+  static DonationModel fromJson(Map<String, dynamic> json) => DonationModel(
         donationId: json['donationId'],
         donationTitle: json['title'],
         donationDetails: json['description'],
         donationQuantity: json['quantity'],
         donationLocation: json['location'],
+        donorEmail: json['donor'],
+        donorID: json['donorID'],
         donationStatus : json['status'],
       );
 }
