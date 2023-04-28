@@ -27,7 +27,9 @@ class _DonationPageState extends State<DonationPage> {
           } else if (snapshot.hasData) {
             final donationList = snapshot.data!;
             return ListView(
-              children: donationList.map(buildDonationList).toList(),
+              children: donationList.map((donation) {
+                return buildDonationList(context,donation);
+              }).toList(),
             );
           } else {
             return const Center(

@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'donation_model.dart';
 import '../auth/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-//DONATION FORM WHEN YOU PRESS ADD DONATION BUTTON
-
-class DonationForm extends StatefulWidget {
-  const DonationForm({super.key});
+class UpdateDonation extends StatefulWidget {
+  final String donationId,
+      donationTitle,
+      donationDetails,
+      donationLocation,
+      donorEmail,
+      donorId;
+  final int donationQuantity;
+  const UpdateDonation(
+      {required this.donationId,
+      required this.donationTitle,
+      required this.donationDetails,
+      required this.donationLocation,
+      required this.donorEmail,
+      required this.donorId,
+      required this.donationQuantity,
+      super.key});
 
   @override
-  State<DonationForm> createState() => _DonationFormState();
+  State<UpdateDonation> createState() => _UpdateDonationState();
 }
 
-class _DonationFormState extends State<DonationForm> {
+class _UpdateDonationState extends State<UpdateDonation> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   static final numCheck = RegExp(r'^-?[0-9]+$');
   final TextEditingController donationTitle = TextEditingController();
@@ -21,29 +33,19 @@ class _DonationFormState extends State<DonationForm> {
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
 
-  Future<void> createDonation(
-      {required String donationTitle,
-      required String donationDetails,
-      required int donationQuantity,
-      required String donationLocation}) async {
-    final docDonation =
-        FirebaseFirestore.instance.collection('donations').doc();
-    final donorInfo = FirebaseAuth.instance.currentUser!;
 
-    final donationCrud = DonationModel(
-      donationId: docDonation.id,
-      donationTitle: donationTitle,
-      donationDetails: donationDetails,
-      donationQuantity: donationQuantity,
-      donationLocation: donationLocation,
-      donorEmail: donorInfo.email!,
-      donorID: donorInfo.uid
-    );
-    final json = donationCrud.toJson();
+  Future<void> updateValues() async {
 
-    await docDonation.set(json);
+
   }
-
+  @override
+  void initState() {
+    donationTitle.text = widget.donationTitle;
+    donationDetails.text = widget.donationDetails;
+    donationQuantity.text = widget.donationQuantity.toString();
+    donationLocation.text = widget.donationLocation;
+    return super.initState();
+  }
 
   @override
   void dispose() {
@@ -51,7 +53,7 @@ class _DonationFormState extends State<DonationForm> {
     donationDetails.dispose();
     donationQuantity.dispose();
     donationDetails.dispose();
-    super.dispose();
+    return super.dispose();
   }
 
   @override
@@ -133,18 +135,13 @@ class _DonationFormState extends State<DonationForm> {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) return;
             try {
-              createDonation(
-                  donationTitle: donationTitle.text,
-                  donationDetails: donationDetails.text,
-                  donationQuantity: int.parse(donationQuantity.text),
-                  donationLocation: donationLocation.text);
-              Utils.showSnackBarGreen('Successfully added Donation');
+              //TODO: Add updatevalue() function here
               Navigator.pop(context);
             } on FirebaseException catch (e) {
               Utils.showSnackBar(e.message);
             }
           },
-          child: const Text('Save'),
+          child: const Text('Update'),
         ),
       ],
     );

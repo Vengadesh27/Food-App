@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_donation/pages/update_donation.dart';
 import 'donation_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../auth/utils.dart';
@@ -12,7 +13,8 @@ Stream<List<DonationModel>> readDonations() => FirebaseFirestore.instance
         .map((doc) => DonationModel.fromJson(doc.data()))
         .toList());
 
-Widget buildDonationList(DonationModel donation) => Container(
+Widget buildDonationList(BuildContext context, DonationModel donation) =>
+    Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Card(
         elevation: 8,
@@ -102,13 +104,34 @@ Widget buildDonationList(DonationModel donation) => Container(
                   TextButton(
                     child: const Text('EDIT'),
                     onPressed: () {
+                      String donationId = donation.donationId;
+                      String donationTitle = donation.donationTitle;
+                      String donationDetails = donation.donationDetails;
+                      int donationQuantity = donation.donationQuantity;
+                      String donationLocation = donation.donationLocation;
+                      String donorEmail = donation.donorEmail;
+                      String donorID = donation.donorID;
+                      showDialog(
+                        context: context,
+                        builder: ((context) => UpdateDonation(
+                            donationId: donationId,
+                            donationTitle: donationTitle,
+                            donationDetails: donationDetails,
+                            donationQuantity: donationQuantity,
+                            donationLocation: donationLocation,
+                            donorEmail: donorEmail,
+                            donorId: donorID)),
+                      );
                     },
                   ),
                   const SizedBox(width: 8),
                   TextButton(
                     child: const Text('DELETE'),
                     onPressed: () async {
-                      await FirebaseFirestore.instance.collection('donations').doc(donation.donationId).delete();
+                      await FirebaseFirestore.instance
+                          .collection('donations')
+                          .doc(donation.donationId)
+                          .delete();
                       Utils.showSnackBar('Donation was deleted');
                     },
                   ),

@@ -175,7 +175,6 @@ class _SigninScreenState extends State<SigninScreen> {
           password: passwordController.text.trim());
           saveSignUpData(fnameController.text,emailController.text.trim(),dropDownValue,userCred.user!.uid);
     } on FirebaseAuthException catch (e) {
-      print(e);
       Utils.showSnackBar(e.message);
     }
 
