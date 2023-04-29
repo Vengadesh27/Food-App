@@ -13,6 +13,7 @@ class DonationModel {
   final String donationStatus = 'Available';
   final String donorEmail;
   final String donorID;
+  // final DateTime expirationDate;
 
   DonationModel({
     required this.donationId,
@@ -22,6 +23,7 @@ class DonationModel {
     required this.donationLocation,
     required this.donorEmail,
     required this.donorID,
+    // required this.expirationDate,
     donationStatus,
   });
 
@@ -36,6 +38,7 @@ class DonationModel {
         'recipient': recipientName,
         'recipientId': recipientId,
         'timeStamp': FieldValue.serverTimestamp(),
+        // 'expirationDate': Timestamp.fromDate(expirationDate),
         'status': donationStatus
       };
 
@@ -48,5 +51,6 @@ class DonationModel {
         donorEmail: json['donor'],
         donorID: json['donorID'],
         donationStatus : json['status'],
+        // expirationDate: json['expirationDate']
       );
 }

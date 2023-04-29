@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'donation_model.dart';
 import '../auth/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:intl/intl.dart';
 
 //DONATION FORM WHEN YOU PRESS ADD DONATION BUTTON
 
@@ -20,30 +21,35 @@ class _DonationFormState extends State<DonationForm> {
   final TextEditingController donationDetails = TextEditingController();
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
+  final TextEditingController expirationDateController = TextEditingController();
 
-  Future<void> createDonation(
-      {required String donationTitle,
-      required String donationDetails,
-      required int donationQuantity,
-      required String donationLocation}) async {
+  DateTime selectedExpirationDate = DateTime.now();
+
+  Future<void> createDonation({
+    required String donationTitle,
+    required String donationDetails,
+    required int donationQuantity,
+    required String donationLocation,
+    // required DateTime expirationDate,
+  }) async {
     final docDonation =
         FirebaseFirestore.instance.collection('donations').doc();
     final donorInfo = FirebaseAuth.instance.currentUser!;
 
     final donationCrud = DonationModel(
-      donationId: docDonation.id,
-      donationTitle: donationTitle,
-      donationDetails: donationDetails,
-      donationQuantity: donationQuantity,
-      donationLocation: donationLocation,
-      donorEmail: donorInfo.email!,
-      donorID: donorInfo.uid
-    );
+        donationId: docDonation.id,
+        donationTitle: donationTitle,
+        donationDetails: donationDetails,
+        donationQuantity: donationQuantity,
+        donationLocation: donationLocation,
+        donorEmail: donorInfo.email!,
+        donorID: donorInfo.uid,
+        // expirationDate: expirationDate,
+        );
     final json = donationCrud.toJson();
 
     await docDonation.set(json);
   }
-
 
   @override
   void dispose() {
@@ -51,7 +57,7 @@ class _DonationFormState extends State<DonationForm> {
     donationDetails.dispose();
     donationQuantity.dispose();
     donationDetails.dispose();
-    super.dispose();
+    return super.dispose();
   }
 
   @override
@@ -119,6 +125,34 @@ class _DonationFormState extends State<DonationForm> {
                 validator: (value) =>
                     value!.isEmpty ? 'Location cannot be empty' : null,
               ),
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: expirationDateController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Expiration Date',
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: selectedExpirationDate,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2024));
+                  if (pickedDate != null && pickedDate != selectedExpirationDate) {
+                    // String formattedDate =
+                    //     // DateFormat('yyyy-MM-dd').format(pickedDate);
+                    setState(() {
+                      expirationDateController.text = pickedDate.toString();
+                      selectedExpirationDate = pickedDate;
+                    }); 
+                  }
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) =>
+                    value!.isEmpty ? 'Date Not selected' : null,
+              ),
             ],
           ),
         ),
@@ -134,10 +168,13 @@ class _DonationFormState extends State<DonationForm> {
             if (!isValid) return;
             try {
               createDonation(
-                  donationTitle: donationTitle.text,
-                  donationDetails: donationDetails.text,
-                  donationQuantity: int.parse(donationQuantity.text),
-                  donationLocation: donationLocation.text);
+                  donationTitle: donationTitle.text.trim(),
+                  donationDetails: donationDetails.text.trim(),
+                  donationQuantity: int.parse(donationQuantity.text.trim()),
+                  donationLocation: donationLocation.text.trim(),
+                  // expirationDate: selectedExpirationDate
+                  
+                  );
               Utils.showSnackBarGreen('Successfully added Donation');
               Navigator.pop(context);
             } on FirebaseException catch (e) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../auth/utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'donation_model.dart';
 
 class UpdateDonation extends StatefulWidget {
   final String donationId,
@@ -33,11 +33,33 @@ class _UpdateDonationState extends State<UpdateDonation> {
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
 
+  Future<void> updateDonation({
+    required String donationId,
+    required String donationTitle,
+    required String donationDetails,
+    required String donationLocation,
+    required String donorEmail,
+    required String donorId,
+    required int donationQuantity,
+  }) async {
+    final docDonation =
+        FirebaseFirestore.instance.collection('donations').doc(donationId);
 
-  Future<void> updateValues() async {
-
-
+    final donationCrud = DonationModel(
+        donationId: donationId,
+        donationTitle: donationTitle,
+        donationDetails: donationDetails,
+        donationQuantity: donationQuantity,
+        donationLocation: donationLocation,
+        donorEmail: donorEmail,
+        donorID: donorId);
+    final json = donationCrud.toJson();
+    await docDonation
+        .update(json)
+        .then((_) => Utils.showSnackBarGreen('Donation was updated'))
+        .catchError((error) => Utils.showSnackBar('$error occured'));
   }
+
   @override
   void initState() {
     donationTitle.text = widget.donationTitle;
@@ -121,6 +143,8 @@ class _UpdateDonationState extends State<UpdateDonation> {
                 validator: (value) =>
                     value!.isEmpty ? 'Location cannot be empty' : null,
               ),
+              
+              
             ],
           ),
         ),
@@ -135,7 +159,15 @@ class _UpdateDonationState extends State<UpdateDonation> {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) return;
             try {
-              //TODO: Add updatevalue() function here
+              updateDonation(
+                donationId: widget.donationId,
+                donationTitle: donationTitle.text.trim(),
+                donationDetails: donationDetails.text.trim(),
+                donationQuantity: int.parse(donationQuantity.text.trim()),
+                donationLocation: donationLocation.text.trim(),
+                donorEmail: widget.donorEmail,
+                donorId: widget.donorId,
+              );
               Navigator.pop(context);
             } on FirebaseException catch (e) {
               Utils.showSnackBar(e.message);
