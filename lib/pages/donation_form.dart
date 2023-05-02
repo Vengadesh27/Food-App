@@ -30,7 +30,7 @@ class _DonationFormState extends State<DonationForm> {
     required String donationDetails,
     required int donationQuantity,
     required String donationLocation,
-    // required DateTime expirationDate,
+    required Timestamp expirationDate,
   }) async {
     final docDonation =
         FirebaseFirestore.instance.collection('donations').doc();
@@ -44,7 +44,7 @@ class _DonationFormState extends State<DonationForm> {
         donationLocation: donationLocation,
         donorEmail: donorInfo.email!,
         donorID: donorInfo.uid,
-        // expirationDate: expirationDate,
+        expirationDate: expirationDate,
         );
     final json = donationCrud.toJson();
 
@@ -56,7 +56,8 @@ class _DonationFormState extends State<DonationForm> {
     donationTitle.dispose();
     donationDetails.dispose();
     donationQuantity.dispose();
-    donationDetails.dispose();
+    expirationDateController.dispose();
+    donationLocation.dispose();
     return super.dispose();
   }
 
@@ -172,8 +173,7 @@ class _DonationFormState extends State<DonationForm> {
                   donationDetails: donationDetails.text.trim(),
                   donationQuantity: int.parse(donationQuantity.text.trim()),
                   donationLocation: donationLocation.text.trim(),
-                  // expirationDate: selectedExpirationDate
-                  
+                  expirationDate: Timestamp.fromDate(selectedExpirationDate) 
                   );
               Utils.showSnackBarGreen('Successfully added Donation');
               Navigator.pop(context);

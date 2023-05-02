@@ -11,6 +11,7 @@ class UpdateDonation extends StatefulWidget {
       donorEmail,
       donorId;
   final int donationQuantity;
+  final Timestamp expirationDate;
   const UpdateDonation(
       {required this.donationId,
       required this.donationTitle,
@@ -19,6 +20,7 @@ class UpdateDonation extends StatefulWidget {
       required this.donorEmail,
       required this.donorId,
       required this.donationQuantity,
+      required this.expirationDate,
       super.key});
 
   @override
@@ -32,27 +34,32 @@ class _UpdateDonationState extends State<UpdateDonation> {
   final TextEditingController donationDetails = TextEditingController();
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
+  final TextEditingController expirationDateController =
+      TextEditingController();
+  late DateTime selectedExpirationDate;
 
-  Future<void> updateDonation({
-    required String donationId,
-    required String donationTitle,
-    required String donationDetails,
-    required String donationLocation,
-    required String donorEmail,
-    required String donorId,
-    required int donationQuantity,
-  }) async {
+  Future<void> updateDonation(
+      {required String donationId,
+      required String donationTitle,
+      required String donationDetails,
+      required String donationLocation,
+      required String donorEmail,
+      required String donorId,
+      required int donationQuantity,
+      required Timestamp expirationDate}) async {
     final docDonation =
         FirebaseFirestore.instance.collection('donations').doc(donationId);
 
     final donationCrud = DonationModel(
-        donationId: donationId,
-        donationTitle: donationTitle,
-        donationDetails: donationDetails,
-        donationQuantity: donationQuantity,
-        donationLocation: donationLocation,
-        donorEmail: donorEmail,
-        donorID: donorId);
+      donationId: donationId,
+      donationTitle: donationTitle,
+      donationDetails: donationDetails,
+      donationQuantity: donationQuantity,
+      donationLocation: donationLocation,
+      donorEmail: donorEmail,
+      donorID: donorId,
+      expirationDate: expirationDate,
+    );
     final json = donationCrud.toJson();
     await docDonation
         .update(json)
@@ -66,6 +73,8 @@ class _UpdateDonationState extends State<UpdateDonation> {
     donationDetails.text = widget.donationDetails;
     donationQuantity.text = widget.donationQuantity.toString();
     donationLocation.text = widget.donationLocation;
+    expirationDateController.text = widget.expirationDate.toDate().toString();
+    selectedExpirationDate = widget.expirationDate.toDate();
     return super.initState();
   }
 
@@ -74,7 +83,8 @@ class _UpdateDonationState extends State<UpdateDonation> {
     donationTitle.dispose();
     donationDetails.dispose();
     donationQuantity.dispose();
-    donationDetails.dispose();
+    donationLocation.dispose();
+    expirationDateController.dispose();
     return super.dispose();
   }
 
@@ -143,8 +153,34 @@ class _UpdateDonationState extends State<UpdateDonation> {
                 validator: (value) =>
                     value!.isEmpty ? 'Location cannot be empty' : null,
               ),
-              
-              
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: expirationDateController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Expiration Date',
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: selectedExpirationDate,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2024));
+                  if (pickedDate != null) {
+                    // String formattedDate =
+                    //     // DateFormat('yyyy-MM-dd').format(pickedDate);
+                    setState(() {
+                      expirationDateController.text = pickedDate.toString();
+                      selectedExpirationDate = pickedDate;
+                    });
+                  }
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) =>
+                    value!.isEmpty ? 'Date Not selected' : null,
+              ),
             ],
           ),
         ),
@@ -167,6 +203,7 @@ class _UpdateDonationState extends State<UpdateDonation> {
                 donationLocation: donationLocation.text.trim(),
                 donorEmail: widget.donorEmail,
                 donorId: widget.donorId,
+                expirationDate: Timestamp.fromDate(selectedExpirationDate),
               );
               Navigator.pop(context);
             } on FirebaseException catch (e) {

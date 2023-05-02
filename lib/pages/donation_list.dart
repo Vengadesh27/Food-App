@@ -84,6 +84,15 @@ Widget buildDonationList(BuildContext context, DonationModel donation) =>
               ),
               Row(
                 children: [
+                  const Text('Expiration Date: '),
+                  Text(donation.expirationDate.toDate().toString()),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
                   const Text('Status: '),
                   Text(donation.donationStatus),
                 ],
@@ -111,16 +120,19 @@ Widget buildDonationList(BuildContext context, DonationModel donation) =>
                       String donationLocation = donation.donationLocation;
                       String donorEmail = donation.donorEmail;
                       String donorID = donation.donorID;
+                      Timestamp expirationDate = donation.expirationDate;
                       showDialog(
                         context: context,
                         builder: ((context) => UpdateDonation(
-                            donationId: donationId,
-                            donationTitle: donationTitle,
-                            donationDetails: donationDetails,
-                            donationQuantity: donationQuantity,
-                            donationLocation: donationLocation,
-                            donorEmail: donorEmail,
-                            donorId: donorID)),
+                              donationId: donationId,
+                              donationTitle: donationTitle,
+                              donationDetails: donationDetails,
+                              donationQuantity: donationQuantity,
+                              donationLocation: donationLocation,
+                              donorEmail: donorEmail,
+                              donorId: donorID,
+                              expirationDate: expirationDate,
+                            )),
                       );
                     },
                   ),
