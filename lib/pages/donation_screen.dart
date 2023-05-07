@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_donation/pages/donation_form.dart';
 import 'donation_model.dart';
 import 'donation_list.dart';
+import '../generate_report/pdf_api.dart';
+import '../generate_report/pdf_view.dart';
 
 //MAIN DONATION SCREEN
 //DONATION LIST AND DONATION ADD BUTTON HERE
@@ -19,26 +21,62 @@ class _DonationPageState extends State<DonationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<DonationModel>>(
-        stream: readDonations(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Some thing went wrong! ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            final donationList = snapshot.data!;
-            return ListView(
-              children: donationList.map((donation) {
-                return buildDonationList(context,donation);
-              }).toList(),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
+        body: StreamBuilder<List<DonationModel>>(
+          stream: readDonations(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Some thing went wrong! ${snapshot.error}');
+            } else if (snapshot.hasData) {
+              final donationList = snapshot.data!;
+              return ListView(
+                children: donationList.map((donation) {
+                  return buildDonationList(context, donation);
+                }).toList(),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.blue,
+              onPressed: () async {
+                final pdfFile = await PdfApi.generateTable();
+                showDialog(
+                  context: context,
+                  builder: ((context) => PdfViewer(file: pdfFile,)),
+                );
+              },
+              heroTag: null,
+              child: const Icon(Icons.save),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            FloatingActionButton(
+              backgroundColor: Colors.blue,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: ((context) => const DonationForm()),
+                );
+              },
+              heroTag: null,
+              child: const Icon(Icons.add),
+            ),
+          ],
+        ));
+  }
+}
+
+
+/*
+FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () {
           showDialog(
@@ -48,6 +86,4 @@ class _DonationPageState extends State<DonationPage> {
         },
         child: const Icon(Icons.add),
       ),
-    );
-  }
-}
+ */

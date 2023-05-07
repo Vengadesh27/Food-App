@@ -16,7 +16,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   static const List<Widget> pages = <Widget>[
-    Text('Welcome Admin', style: optionStyle,),
+    Text(
+      'Welcome Admin',
+      style: optionStyle,
+    ),
     DonationPage(),
     ProfilePage(),
   ];

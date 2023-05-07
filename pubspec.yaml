@@ -41,6 +41,9 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_core: ^2.10.0
   email_validator: ^2.1.17
+  pdf: ^3.10.1
+  path_provider: ^2.0.14
+  pdf_viewer_plugin: ^2.0.1
   # intl: ^0.18.1
   
 dev_dependencies:
