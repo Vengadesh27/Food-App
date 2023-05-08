@@ -32,6 +32,7 @@ class _SigninScreenState extends State<SigninScreen> {
           'Email': email,
           'Fname': fname,
           'role': role,
+          'uid': uid,
         });
       }
 

@@ -8,9 +8,9 @@ class DonationModel {
   final String donationDetails;
   final int donationQuantity;
   final String donationLocation;
-  final String recipientId = 'Not defined';
-  final String recipientName = 'Not defined';
-  final String donationStatus = 'Available';
+  final String recipientId;
+  final String recipientName;
+  final String donationStatus;
   final String donorEmail;
   final String donorID;
   final Timestamp expirationDate;
@@ -24,7 +24,9 @@ class DonationModel {
     required this.donorEmail,
     required this.donorID,
     required this.expirationDate,
-    donationStatus,
+    required this.donationStatus,
+    required this.recipientName,
+    required this.recipientId
   });
 
   Map<String, dynamic> toJson() => {
@@ -51,6 +53,8 @@ class DonationModel {
         donorEmail: json['donor'],
         donorID: json['donorID'],
         donationStatus : json['status'],
-        expirationDate: json['expirationDate']
+        expirationDate: json['expirationDate'],
+        recipientId: json['recipientId'],
+        recipientName: json['recipient']
       );
 }

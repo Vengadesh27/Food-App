@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_donation/auth/utils.dart';
 import 'package:food_donation/pages/donation_form.dart';
 import 'donation_model.dart';
 import 'donation_list.dart';
@@ -46,10 +47,18 @@ class _DonationPageState extends State<DonationPage> {
             FloatingActionButton(
               backgroundColor: Colors.blue,
               onPressed: () async {
+                Future<String> userRole = getUserRole();
+                String role = await userRole;
+                if (role != 'admin'){
+                  Utils.showSnackBar('Admin Privilege Only');
+                  return;
+                }
                 final pdfFile = await PdfApi.generateTable();
                 showDialog(
                   context: context,
-                  builder: ((context) => PdfViewer(file: pdfFile,)),
+                  builder: ((context) => PdfViewer(
+                        file: pdfFile,
+                      )),
                 );
               },
               heroTag: null,
@@ -60,7 +69,13 @@ class _DonationPageState extends State<DonationPage> {
             ),
             FloatingActionButton(
               backgroundColor: Colors.blue,
-              onPressed: () {
+              onPressed: () async {
+                Future<String> userRole = getUserRole();
+                String role = await userRole;
+                if (role == 'recipient'){
+                  Utils.showSnackBar('Recipient Cannot Donate');
+                  return;
+                }
                 showDialog(
                   context: context,
                   builder: ((context) => const DonationForm()),

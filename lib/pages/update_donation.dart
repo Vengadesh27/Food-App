@@ -9,7 +9,10 @@ class UpdateDonation extends StatefulWidget {
       donationDetails,
       donationLocation,
       donorEmail,
-      donorId;
+      donorId,
+      recipientId,
+      recipientEmail,
+      donationStatus;
   final int donationQuantity;
   final Timestamp expirationDate;
   const UpdateDonation(
@@ -21,6 +24,9 @@ class UpdateDonation extends StatefulWidget {
       required this.donorId,
       required this.donationQuantity,
       required this.expirationDate,
+      required this.recipientEmail,
+      required this.recipientId,
+      required this.donationStatus,
       super.key});
 
   @override
@@ -46,7 +52,11 @@ class _UpdateDonationState extends State<UpdateDonation> {
       required String donorEmail,
       required String donorId,
       required int donationQuantity,
-      required Timestamp expirationDate}) async {
+      required Timestamp expirationDate,
+      required String recipientId,
+      required String recipientEmail,
+      required String donationStatus,
+      }) async {
     final docDonation =
         FirebaseFirestore.instance.collection('donations').doc(donationId);
 
@@ -59,6 +69,9 @@ class _UpdateDonationState extends State<UpdateDonation> {
       donorEmail: donorEmail,
       donorID: donorId,
       expirationDate: expirationDate,
+      recipientId: recipientId,
+      recipientName: recipientEmail,
+      donationStatus: donationStatus
     );
     final json = donationCrud.toJson();
     await docDonation
@@ -204,6 +217,9 @@ class _UpdateDonationState extends State<UpdateDonation> {
                 donorEmail: widget.donorEmail,
                 donorId: widget.donorId,
                 expirationDate: Timestamp.fromDate(selectedExpirationDate),
+                recipientEmail: widget.recipientEmail,
+                recipientId:  widget.recipientId,
+                donationStatus: widget.donationStatus,
               );
               Navigator.pop(context);
             } on FirebaseException catch (e) {

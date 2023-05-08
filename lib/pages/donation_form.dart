@@ -45,6 +45,9 @@ class _DonationFormState extends State<DonationForm> {
         donorEmail: donorInfo.email!,
         donorID: donorInfo.uid,
         expirationDate: expirationDate,
+        donationStatus: 'Available',
+        recipientId: 'Not Defined',
+        recipientName: 'Not Defined',
         );
     final json = donationCrud.toJson();
 
