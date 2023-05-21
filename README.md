@@ -1,16 +1,18 @@
-# food_donation
+# Food Donation App
 
-A new Flutter project.
+Hello. This food donation app is my first real project that i did for my final year project using Firebase as the Cloud Database. 
+The app has three users: Admin, Donor and Recipient. Admin/Donor can post donations (CRUD), accept
+donations & generate report (only admin). Recipients can view and request donations
 
-## Getting Started
+## Features of the App
+- Allows role based user authentication.
+- Uses firebase as a realtime cloud database.
+- Donor can add, update, delete, view and approve donations.
+- Recipients can only view and request for donations.
+- Admin has all functionality of a donor while also being able to generate report.
+- The generated report is in tabular format viewed as pdf.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
