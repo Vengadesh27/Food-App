@@ -2,7 +2,7 @@
 
 Hello. This food donation app is my first real project that i did for my final year project using Firebase as the Cloud Database. 
 The app has three users: Admin, Donor and Recipient. Admin/Donor can post donations (CRUD), accept
-donations & generate report (only admin). Recipients can view and request donations
+donations & generate report (only admin). Recipients can view and request donations.
 
 ## Features of the App
 - Allows role based user authentication.
