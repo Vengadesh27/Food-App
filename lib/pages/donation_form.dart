@@ -21,7 +21,8 @@ class _DonationFormState extends State<DonationForm> {
   final TextEditingController donationDetails = TextEditingController();
   final TextEditingController donationQuantity = TextEditingController();
   final TextEditingController donationLocation = TextEditingController();
-  final TextEditingController expirationDateController = TextEditingController();
+  final TextEditingController expirationDateController =
+      TextEditingController();
 
   DateTime selectedExpirationDate = DateTime.now();
 
@@ -37,18 +38,18 @@ class _DonationFormState extends State<DonationForm> {
     final donorInfo = FirebaseAuth.instance.currentUser!;
 
     final donationCrud = DonationModel(
-        donationId: docDonation.id,
-        donationTitle: donationTitle,
-        donationDetails: donationDetails,
-        donationQuantity: donationQuantity,
-        donationLocation: donationLocation,
-        donorEmail: donorInfo.email!,
-        donorID: donorInfo.uid,
-        expirationDate: expirationDate,
-        donationStatus: 'Available',
-        recipientId: 'Not Defined',
-        recipientName: 'Not Defined',
-        );
+      donationId: docDonation.id,
+      donationTitle: donationTitle,
+      donationDetails: donationDetails,
+      donationQuantity: donationQuantity,
+      donationLocation: donationLocation,
+      donorEmail: donorInfo.email!,
+      donorID: donorInfo.uid,
+      expirationDate: expirationDate,
+      donationStatus: 'Available',
+      recipientId: 'Not Defined',
+      recipientName: 'Not Defined',
+    );
     final json = donationCrud.toJson();
 
     await docDonation.set(json);
@@ -143,14 +144,15 @@ class _DonationFormState extends State<DonationForm> {
                       context: context,
                       initialDate: selectedExpirationDate,
                       firstDate: DateTime.now(),
-                      lastDate: DateTime(2024));
-                  if (pickedDate != null && pickedDate != selectedExpirationDate) {
+                      lastDate: DateTime(2029));
+                  if (pickedDate != null &&
+                      pickedDate != selectedExpirationDate) {
                     // String formattedDate =
-                    //     // DateFormat('yyyy-MM-dd').format(pickedDate);
+                    //     DateFormat('yyyy-MM-dd').format(pickedDate);
                     setState(() {
                       expirationDateController.text = pickedDate.toString();
                       selectedExpirationDate = pickedDate;
-                    }); 
+                    });
                   }
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -176,8 +178,7 @@ class _DonationFormState extends State<DonationForm> {
                   donationDetails: donationDetails.text.trim(),
                   donationQuantity: int.parse(donationQuantity.text.trim()),
                   donationLocation: donationLocation.text.trim(),
-                  expirationDate: Timestamp.fromDate(selectedExpirationDate) 
-                  );
+                  expirationDate: Timestamp.fromDate(selectedExpirationDate));
               Utils.showSnackBarGreen('Successfully added Donation');
               Navigator.pop(context);
             } on FirebaseException catch (e) {

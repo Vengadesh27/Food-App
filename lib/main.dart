@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:food_donation/auth/auth_page.dart';
 import 'package:food_donation/auth/utils.dart';
 import 'package:food_donation/screens/admin_home_screen.dart';
@@ -32,6 +33,10 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: Colors.white, // Navigation bar
+            statusBarColor: Colors.white, // Status bar
+          ),
           title: const Center(child: Text(_title)),
         ),
         body: StreamBuilder<User?>(
@@ -42,7 +47,7 @@ class MyApp extends StatelessWidget {
             } else if (snapshot.hasError) {
               return const Center(child: Text('Something went Wrong!'));
             } else if (snapshot.hasData && snapshot.data != null) {
-                return StreamBuilder(
+              return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("users")
                     .doc(snapshot.data!.uid)
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData && snapshot.data != null) {
-                    final user = snapshot.data!.data() as Map<String,dynamic>;
+                    final user = snapshot.data!.data() as Map<String, dynamic>;
                     if (user['role'] == 'admin') {
                       return const AdminHomeScreen();
                     } else if (user['role'] == 'donor') {
